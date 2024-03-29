@@ -3,7 +3,7 @@
 # last update: Dec 30, 2023
 res.summary <- NULL
 K = 3
-all_divided_by_D = TRUE # change this to FALSE, if only first exposure's SNP-exposure associations are divided by D
+all_divided_by_D = FALSE # change this to FALSE, if only first exposure's SNP-exposure associations are divided by D
 if (all_divided_by_D) {
   D_vec <- c(3, 5.5, 6.5)
 } else {
@@ -19,12 +19,12 @@ if (all_divided_by_D) {
 }
 colnames(sim_settings) <- c('beta','D','rho')
 
-tbl_to_present <- list("main_table1" = c(7,9,11), # the row numbers corresponding to main table
-                       "supp_tables1" = c(1,3,5),
-                       "supp_tables2" = c(2,4,6),
-                       "supp_tables3" = c(8,10,12))
+tbl_to_present <- list("supp_tables4" = c(1,3,5), # the row numbers corresponding to main table
+                       "supp_tables5" = c(7,9,11),
+                       "supp_tables6" = c(2,4,6),
+                       "supp_tables7" = c(8,10,12))
 
-tbl_num <- "main_table1" # to summarize the results for the other tables, change this 
+tbl_num <- "supp_tables4" # to summarize the results for the other tables, change this 
 for (m in tbl_to_present[[tbl_num]]) {
   D = sim_settings[m,]$D
   rho = sim_settings[m,]$rho
@@ -33,7 +33,7 @@ for (m in tbl_to_present[[tbl_num]]) {
   res.beta1 <- NULL
   for (i in c(1:100)) {
     tryCatch({
-      res.beta1 <- rbind(res.beta1, read.csv(file = paste0("3exp_example/all_divided_by_D/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta1_D',sim_settings[m,]$D,'_job',i,'.csv')))
+      res.beta1 <- rbind(res.beta1, read.csv(file = paste0("3exp_example/first_divided_by_D/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta1_D',sim_settings[m,]$D,'_job',i,'.csv')))
     }, error=function(e){})
   }
   
@@ -83,7 +83,7 @@ for (m in tbl_to_present[[tbl_num]]) {
   res.beta2 <- NULL
   for (i in c(1:100)) {
     tryCatch({
-      res.beta2 <- rbind(res.beta2, read.csv(file = paste0("3exp_example/all_divided_by_D/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta2_D',sim_settings[m,]$D,'_job',i,'.csv')))
+      res.beta2 <- rbind(res.beta2, read.csv(file = paste0("3exp_example/first_divided_by_D/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta2_D',sim_settings[m,]$D,'_job',i,'.csv')))
     }, error=function(e){})
   }
   
@@ -134,7 +134,7 @@ for (m in tbl_to_present[[tbl_num]]) {
   res.beta3 <- NULL
   for (i in c(1:100)) {
     tryCatch({
-      res.beta3 <- rbind(res.beta3, read.csv(file = paste0("3exp_example/all_divided_by_D/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta3_D',sim_settings[m,]$D,'_job',i,'.csv')))
+      res.beta3 <- rbind(res.beta3, read.csv(file = paste0("3exp_example/first_divided_by_D/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta3_D',sim_settings[m,]$D,'_job',i,'.csv')))
       }, error=function(e){})
   }
   

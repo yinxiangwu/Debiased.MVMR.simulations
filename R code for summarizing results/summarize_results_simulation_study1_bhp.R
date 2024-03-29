@@ -25,7 +25,7 @@ for (m in tbl_to_present[[tbl_num]]) {
   res.beta1 <- NULL
   for (i in c(1:100)) {
     tryCatch({
-      res.beta1 <- rbind(res.beta1, read.csv(file = paste0("Res/for_pub/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta1_D',sim_settings[m,]$D,'_job',i,'.csv')))
+      res.beta1 <- rbind(res.beta1, read.csv(file = paste0("3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta1_D',sim_settings[m,]$D,'_job',i,'.csv')))
     }, error=function(e){})
   }
   
@@ -75,7 +75,7 @@ for (m in tbl_to_present[[tbl_num]]) {
   res.beta2 <- NULL
   for (i in c(1:100)) {
     tryCatch({
-      res.beta2 <- rbind(res.beta2, read.csv(file = paste0("Res/for_pub/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta2_D',sim_settings[m,]$D,'_job',i,'.csv')))
+      res.beta2 <- rbind(res.beta2, read.csv(file = paste0("3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta2_D',sim_settings[m,]$D,'_job',i,'.csv')))
     }, error=function(e){})
   }
   
@@ -126,7 +126,7 @@ for (m in tbl_to_present[[tbl_num]]) {
   res.beta3 <- NULL
   for (i in c(1:100)) {
     tryCatch({
-      res.beta3 <- rbind(res.beta3, read.csv(file = paste0("Res/for_pub/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta3_D',sim_settings[m,]$D,'_job',task_id,'.csv')))
+      res.beta3 <- rbind(res.beta3, read.csv(file = paste0("3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta3_D',sim_settings[m,]$D,'_job',i,'.csv')))
       }, error=function(e){})
   }
   

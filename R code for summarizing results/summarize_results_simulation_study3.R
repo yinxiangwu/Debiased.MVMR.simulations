@@ -7,7 +7,7 @@ res.tmp1 <- NULL
 
 for (i in 1:100) {
   tryCatch({
-    res.tmp1 <- rbind(res.tmp1, read.csv(paste0('Res/for_pub/individual_lvl_sim/res_beta1_h01_job',i,'.csv')))
+    res.tmp1 <- rbind(res.tmp1, read.csv(paste0('individual_lvl_sim/res_beta1_h01_job',i,'.csv')))
   }, error=function(e){})
 }
 
@@ -57,7 +57,7 @@ res.tmp2 <- NULL
 
 for (i in 1:100) {
   tryCatch({
-    res.tmp2 <- rbind(res.tmp2, read.csv(paste0('Res/for_pub/individual_lvl_sim/res_beta2_h01_job',i,'.csv')))
+    res.tmp2 <- rbind(res.tmp2, read.csv(paste0('individual_lvl_sim/res_beta2_h01_job',i,'.csv')))
   }, error=function(e){})
 }
 
@@ -77,7 +77,7 @@ res.egger.cp2 <- mean(res.tmp2[,3] + qnorm(0.025) * res.tmp2[,4] < beta0[2] & be
 res.median2 <- mean(res.tmp2[,5])
 res.median.sd2 <- sd(res.tmp2[,5])
 res.median.se2 <- mean(res.tmp2[,6])
-res.median.cp2 <- mean(res.tmp2[,5] + qnorm(0.025) * res.tmp2[,5] < beta0[2] & beta0[2] < res.tmp2[,5] + qnorm(0.975) * res.tmp2[,6])
+res.median.cp2 <- mean(res.tmp2[,5] + qnorm(0.025) * res.tmp2[,6] < beta0[2] & beta0[2] < res.tmp2[,6] + qnorm(0.975) * res.tmp2[,6])
 
 # Grapple
 res.grapple2 <- mean(res.tmp2[,7])
@@ -107,7 +107,7 @@ res.tmp3 <- NULL
 
 for (i in 1:100) {
   tryCatch({
-    res.tmp3 <- rbind(res.tmp3, read.csv(paste0('Res/for_pub/individual_lvl_sim/res_beta3_h01_job',i,'.csv')))
+    res.tmp3 <- rbind(res.tmp3, read.csv(paste0('individual_lvl_sim/res_beta3_h01_job',i,'.csv')))
   }, error=function(e){})
 }
 

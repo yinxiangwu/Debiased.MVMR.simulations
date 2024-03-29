@@ -34,7 +34,7 @@ for (m in 1:nrow(sim_settings)) {
       res.beta1 <- matrix(nrow = n_rep, ncol = 19)
       res.beta2 <- matrix(nrow = n_rep, ncol = 19)
       res.beta3 <- matrix(nrow = n_rep, ncol = 19)
-      # set.seed(12512341 + task_id + m)
+      set.seed(213 + task_id + m*10000)
       # setting
       D = sim_settings[m,]$D
       rho = sim_settings[m,]$rho
@@ -108,23 +108,11 @@ for (m in 1:nrow(sim_settings)) {
       res.mvmr.grapple <- res.grapple$beta.hat
       res.mvmr.grapple.se <- sqrt(diag(res.grapple$beta.var))
       # MRBEE
-      # bx: mxp matrix of IV associations with exposures
-      # bxse: mxp matrix of IV SEs for each exposures
-      # by: mx1 vector of IV associations with outcome
-      # byse: mx1 vector of IV SEs for the outcome
-      # R: (p+1)x(p+1) matrix of correlations between measurement errors for the outcome (first/top left position) and each exposure
-      # Ncor: number of nonsignificant SNPs used to calculate `R`
       R <- diag(K+1)
-      R[2:4,2:4] <- P
-      bx <- beta.exposure 
-      by <- matrix(beta.outcome, ncol = 1)
-      bxse <- se.exposure
-      byse <- matrix(se.outcome,ncol = 1)
-      bT=list(R=R,Ncor=NA,EstHarm=cbind(by,bx),SEHarm=cbind(byse,bxse))
-      pD=prepData(bT)
-      fit=MRBEE.IMRP(pD) # stores causal estimates and some model characteristics
-      res.mrbee.est <- fit$CausalEstimates[2:(K+1)]
-      res.mrbee.se <- sqrt(diag(fit$VCovCausalEstimates))[2:(K+1)]
+      R[1:K,1:K] <- P
+      fit=MRBEE.IMRP(by=beta.outcome,bX=beta.exposure,byse=se.outcome,bXse=se.exposure,Rxy=R)
+      res.mrbee.est <- fit$theta
+      res.mrbee.se <- sqrt(diag(fit$covtheta))
       
       # Conditional F-stats
       F.data <- format_mvmr(BXGs = beta.exposure,
@@ -159,8 +147,8 @@ for (m in 1:nrow(sim_settings)) {
       res.beta2[i,] <- tmp.res[2,]
       res.beta3[i,] <- tmp.res[3,]
       }
-      write.csv(res.beta1, file = paste0("Res/for_pub/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta1_D',sim_settings[m,]$D,'_job',task_id,'.csv'), row.names = FALSE)
-      write.csv(res.beta2, file = paste0("Res/for_pub/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta2_D',sim_settings[m,]$D,'_job',task_id,'.csv'), row.names = FALSE)
-      write.csv(res.beta3, file = paste0("Res/for_pub/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta3_D',sim_settings[m,]$D,'_job',task_id,'.csv'), row.names = FALSE)
+      write.csv(res.beta1, file = paste0("Res/final/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta1_D',sim_settings[m,]$D,'_job',task_id,'.csv'), row.names = FALSE)
+      write.csv(res.beta2, file = paste0("Res/final/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta2_D',sim_settings[m,]$D,'_job',task_id,'.csv'), row.names = FALSE)
+      write.csv(res.beta3, file = paste0("Res/final/3exp_example/all_divided_by_D_bhp/beta",sim_settings[m,]$beta,'/rho',sim_settings[m,]$rho,'/res_beta3_D',sim_settings[m,]$D,'_job',task_id,'.csv'), row.names = FALSE)
       cat("Finish simulation with m =", m)
 }

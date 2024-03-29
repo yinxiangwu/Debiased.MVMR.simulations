@@ -25,6 +25,7 @@ res.beta3 <- matrix(nrow = n_rep, ncol = 18)
 lambda_choice <- rep(NA, n_rep)
 
 for (i in 1:n_rep) {
+      set.seed(4327+(task_id-1)*n_rep+i)
       # generate data
       dat <- data_gen_individual(hsquare = 0.1)
       # p-value thresholding selection of SNPs
@@ -101,22 +102,11 @@ for (i in 1:n_rep) {
       res.mvmr.grapple <- res.grapple$beta.hat
       res.mvmr.grapple.se <- sqrt(diag(res.grapple$beta.var))
       # MRBEE
-      # bx: mxp matrix of IV associations with exposures
-      # bxse: mxp matrix of IV SEs for each exposures
-      # by: mx1 vector of IV associations with outcome
-      # byse: mx1 vector of IV SEs for the outcome
-      # R: (p+1)x(p+1) matrix of correlations between measurement errors for the outcome (first/top left position) and each exposure
-      # Ncor: number of nonsignificant SNPs used to calculate `R`
-      R <- corr[c(4,1:3),c(4,1:3)]
-      bx <- beta.exposure 
-      by <- matrix(beta.outcome, ncol = 1)
-      bxse <- se.exposure
-      byse <- matrix(se.outcome,ncol = 1)
-      bT=list(R=R,Ncor=NA,EstHarm=cbind(by,bx),SEHarm=cbind(byse,bxse))
-      pD=prepData(bT)
-      fit=MRBEE.IMRP(pD) # stores causal estimates and some model characteristics
-      res.mrbee.est <- fit$CausalEstimates[2:(K+1)]
-      res.mrbee.se <- sqrt(diag(fit$VCovCausalEstimates))[2:(K+1)]
+      R <- diag(K+1)
+      R[1:K,1:K] <- P
+      fit=MRBEE.IMRP(by=beta.outcome,bX=beta.exposure,byse=se.outcome,bXse=se.exposure,Rxy=R)
+      res.mrbee.est <- fit$theta
+      res.mrbee.se <- sqrt(diag(fit$covtheta))
       
       # Conditional F-stats
       F.data <- format_mvmr(BXGs = beta.exposure,
@@ -150,8 +140,8 @@ for (i in 1:n_rep) {
       res.beta2[i,] <- tmp.res[2,]
       res.beta3[i,] <- tmp.res[3,]
       }
-      write.csv(res.beta1, file = paste0('Res/for_pub/individual_lvl_sim/res_beta1_h01_job',task_id,'.csv'), row.names = FALSE)
-      write.csv(res.beta2, file = paste0('Res/for_pub/individual_lvl_sim/res_beta2_h01_job',task_id,'.csv'), row.names = FALSE)
-      write.csv(res.beta3, file = paste0('Res/for_pub/individual_lvl_sim/res_beta3_h01_job',task_id,'.csv'), row.names = FALSE)
+      write.csv(res.beta1, file = paste0('Res/final/individual_lvl_sim/res_beta1_h01_job',task_id,'.csv'), row.names = FALSE)
+      write.csv(res.beta2, file = paste0('Res/final/individual_lvl_sim/res_beta2_h01_job',task_id,'.csv'), row.names = FALSE)
+      write.csv(res.beta3, file = paste0('Res/final/individual_lvl_sim/res_beta3_h01_job',task_id,'.csv'), row.names = FALSE)
       cat("Finish simulation with m =", m)
 

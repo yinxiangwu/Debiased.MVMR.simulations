@@ -68,11 +68,12 @@ for (m in 1:3) {
       IV_strength_matrix <- Reduce("+",lapply(1:p, function(j) {
         beta.exposure.V <- Vj_root_inv[[j]] %*% par.beta.exposure[j,]
         beta.exposure.V %*% t(beta.exposure.V)}))
-      min_kappa_value <- min(eigen(IV_strength_matrix/sqrt(p))$values)
+      kappa_value_true <- min(eigen(IV_strength_matrix/sqrt(p))$values)
       
       res.list <- vector(mode = "list", length = K)
       for (k in 1:K) res.list[[k]] <- matrix(nrow = n_rep, ncol = 18)
       
+      set.seed(436 + task_id + m*10000)
       for (i in 1:n_rep) {
       beta.exposure <- lapply(1:p, function(j) {rmvnorm(1,mean=par.beta.exposure[j,],sigma=
                                                           Vj[[j]])}) %>% Reduce(rbind,.)
@@ -115,23 +116,12 @@ for (m in 1:3) {
       res.mvmr.grapple <- res.grapple$beta.hat
       res.mvmr.grapple.se <- sqrt(diag(res.grapple$beta.var))
       # MRBEE
-      # bx: mxp matrix of IV associations with exposures
-      # bxse: mxp matrix of IV SEs for each exposures
-      # by: mx1 vector of IV associations with outcome
-      # byse: mx1 vector of IV SEs for the outcome
-      # R: (p+1)x(p+1) matrix of correlations between measurement errors for the outcome (first/top left position) and each exposure
-      # Ncor: number of nonsignificant SNPs used to calculate `R`
       R <- diag(K+1)
-      R[2:(K+1),2:(K+1)] <- P
-      bx <- beta.exposure 
-      by <- matrix(beta.outcome, ncol = 1)
-      bxse <- se.exposure
-      byse <- matrix(se.outcome,ncol = 1)
-      bT=list(R=R,Ncor=NA,EstHarm=cbind(by,bx),SEHarm=cbind(byse,bxse))
-      pD=prepData(bT)
-      fit=MRBEE.IMRP(pD) # stores causal estimates and some model characteristics
-      res.mrbee.est <- fit$CausalEstimates[2:(K+1)]
-      res.mrbee.se <- sqrt(diag(fit$VCovCausalEstimates))[2:(K+1)]
+      R[1:K,1:K] <- P
+      fit=MRBEE.IMRP(by=beta.outcome,bX=beta.exposure,byse=se.outcome,bXse=se.exposure,Rxy=R)
+      res.mrbee.est <- fit$theta
+      res.mrbee.se <- sqrt(diag(fit$covtheta))
+      
       # Conditional F-stats
       F.data <- format_mvmr(BXGs = beta.exposure,
                             BYG = beta.outcome,
@@ -163,7 +153,7 @@ for (m in 1:3) {
       
       for (k in 1:K) {res.list[[k]][i,] <- tmp.res[k,]}
       }
-      for (k in 1:K) {write.csv(res.list[[k]], file = paste0('Res/for_pub/10_20_30_exp_example/storeallresults/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',task_id,'.csv'), row.names = FALSE)
+      for (k in 1:K) {write.csv(res.list[[k]], file = paste0('Res/final/10_20_30_exp_example/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',task_id,'.csv'), row.names = FALSE)
       }
       cat("Finish simulation with m =", m)
 }

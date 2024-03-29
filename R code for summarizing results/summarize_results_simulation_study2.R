@@ -7,7 +7,7 @@ K=10 # number of exposures
 k=1 # index of beta to extract
 for (i in 1:100) {
   tryCatch({
-    res.tmp1 <- rbind(res.tmp1, read.csv(paste0('Res/for_pub/10_20_30_exp_example/storeallresults/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',i,'.csv')))
+    res.tmp1 <- rbind(res.tmp1, read.csv(paste0('10_20_30_exp_example/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',i,'.csv')))
   }, error=function(e){})
 }
 
@@ -57,7 +57,7 @@ res.tmp2 <- NULL
 K=20
 for (i in 1:100) {
   tryCatch({
-    res.tmp2 <- rbind(res.tmp2, read.csv(paste0('Res/for_pub/10_20_30_exp_example/storeallresults/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',i,'.csv')))
+    res.tmp2 <- rbind(res.tmp2, read.csv(paste0('10_20_30_exp_example/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',i,'.csv')))
   }, error=function(e){})
 }
 
@@ -108,7 +108,7 @@ res.tmp3 <- NULL
 K=30
 for (i in 1:100) {
   tryCatch({
-    res.tmp3 <- rbind(res.tmp3, read.csv(paste0('Res/for_pub/10_20_30_exp_example/storeallresults/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',i,'.csv')))
+    res.tmp3 <- rbind(res.tmp3, read.csv(paste0('10_20_30_exp_example/K',K,'/res_dmvmr_beta',k,'_K',K,'_job',i,'.csv')))
   }, error=function(e){})
 }
 
